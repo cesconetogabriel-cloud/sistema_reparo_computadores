@@ -1,17 +1,16 @@
 reparo-computadores/
-│
-├─ backend/
-│   ├─ package.json
-│   ├─ server.js
-│   ├─ db.js
-│   ├─ routes/
-│   │   ├─ equipamentos.js
-│   │   ├─ agendamentos.js
-│   │   └─ revisoes.js
-│
-├─ frontend/
-│   ├─ index.html
-│   ├─ style.css
-│   └─ script.js
-│
-└─ README.md
+├── backend/
+│   ├── package.json
+│   ├── server.js
+│   ├── routes/
+│   │   ├── equipamentos.js
+│   │   ├── agendamentos.js
+│   │   └── revisoes.js
+│   └── db/
+│       └── database.js
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
+├── README.md
+└── .gitignore
