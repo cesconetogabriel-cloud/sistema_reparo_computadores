@@ -1,9 +1,17 @@
-sistema_reparo_computadores/
-├── README.md
-├── database/
-│   ├── create_database.sql
-│   └── insert_example.sql
-├── src/
-│   ├── main.py
-│   └── db_connection.py
-└── .gitignore
+reparo-computadores/
+│
+├─ backend/
+│   ├─ package.json
+│   ├─ server.js
+│   ├─ db.js
+│   ├─ routes/
+│   │   ├─ equipamentos.js
+│   │   ├─ agendamentos.js
+│   │   └─ revisoes.js
+│
+├─ frontend/
+│   ├─ index.html
+│   ├─ style.css
+│   └─ script.js
+│
+└─ README.md
