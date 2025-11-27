@@ -1,2 +1,9 @@
-mkdir sistema_reparo_computadores
-cd sistema_reparo_computadores
+sistema_reparo_computadores/
+├── README.md
+├── database/
+│   ├── create_database.sql
+│   └── insert_example.sql
+├── src/
+│   ├── main.py
+│   └── db_connection.py
+└── .gitignore
