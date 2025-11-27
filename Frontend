@@ -1,0 +1,30 @@
+* index.html:
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reparo de Computadores</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Lista de Equipamentos</h1>
+  <ul id="equipamentos"></ul>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+*app.js:
+async function carregarEquipamentos() {
+  const res = await fetch('http://localhost:3000/equipamentos');
+  const dados = await res.json();
+  const ul = document.getElementById('equipamentos');
+  ul.innerHTML = '';
+  dados.forEach(e => {
+    const li = document.createElement('li');
+    li.textContent = `${e.cliente_nome} - ${e.tipo} - ${e.status_equipamento}`;
+    ul.appendChild(li);
+  });
+}
+
+carregarEquipamentos();
+
