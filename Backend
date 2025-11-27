@@ -1,0 +1,57 @@
+cd backend
+npm init -y
+npm install express pg cors body-parser
+
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  user: 'seu_usuario',
+  host: 'localhost',
+  database: 'reparo_computadores',
+  password: 'sua_senha',
+  port: 5432,
+});
+
+module.exports = pool;
+
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+const equipamentosRoutes = require('./routes/equipamentos');
+const agendamentosRoutes = require('./routes/agendamentos');
+const revisoesRoutes = require('./routes/revisoes');
+
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+
+app.use('/equipamentos', equipamentosRoutes);
+app.use('/agendamentos', agendamentosRoutes);
+app.use('/revisoes', revisoesRoutes);
+
+const PORT = 3000;
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+
+const express = require('express');
+const router = express.Router();
+const pool = require('../db/database');
+
+// listar todos equipamentos
+router.get('/', async (req, res) => {
+  const result = await pool.query('SELECT * FROM equipamentos ORDER BY id_equipamento');
+  res.json(result.rows);
+});
+
+// adicionar equipamento
+router.post('/', async (req, res) => {
+  const { cliente_nome, tipo, marca, modelo, numero_serie, problema_relatado } = req.body;
+  const result = await pool.query(
+    `INSERT INTO equipamentos (cliente_nome, tipo, marca, modelo, numero_serie, problema_relatado)
+     VALUES ($1,$2,$3,$4,$5,$6) RETURNING *`,
+    [cliente_nome, tipo, marca, modelo, numero_serie, problema_relatado]
+  );
+  res.json(result.rows[0]);
+});
+
+module.exports = router;
