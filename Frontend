@@ -13,6 +13,13 @@
 </body>
 </html>
 
+*style.css:
+body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+h1 { color: #333; }
+ul { list-style: none; padding: 0; }
+li { background: #fff; margin: 5px 0; padding: 10px; border-radius: 5px; box-shadow: 0 0 5px #ccc; }
+
+
 *app.js:
 async function carregarEquipamentos() {
   const res = await fetch('http://localhost:3000/equipamentos');
