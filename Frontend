@@ -6,12 +6,67 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Lista de Equipamentos</h1>
+  <h1>Reparo de Computadores</h1>
+
+  <!-- Clientes -->
+  <h2>Clientes</h2>
+  <form id="form-cliente">
+    <input type="hidden" id="cliente-id" />
+    <input type="text" id="nome" placeholder="Nome" required />
+    <input type="email" id="email" placeholder="Email" />
+    <input type="text" id="telefone" placeholder="Telefone" />
+    <input type="text" id="endereco" placeholder="Endereço" />
+    <button type="submit">Salvar Cliente</button>
+    <button type="button" id="cancelar-cliente">Cancelar</button>
+  </form>
+  <ul id="clientes"></ul>
+
+  <!-- Equipamentos -->
+  <h2>Equipamentos</h2>
+  <form id="form-equipamento">
+    <input type="hidden" id="equipamento-id" />
+    <input type="text" id="cliente-id-equip" placeholder="ID do Cliente" required />
+    <input type="text" id="tipo" placeholder="Tipo" required />
+    <input type="text" id="marca" placeholder="Marca" />
+    <input type="text" id="modelo" placeholder="Modelo" />
+    <input type="text" id="numero-serie" placeholder="Número de Série" />
+    <input type="text" id="problema" placeholder="Problema Relatado" />
+    <button type="submit">Salvar Equipamento</button>
+    <button type="button" id="cancelar-equipamento">Cancelar</button>
+  </form>
   <ul id="equipamentos"></ul>
+
+  <!-- Agendamentos -->
+  <h2>Agendamentos</h2>
+  <form id="form-agendamento">
+    <input type="hidden" id="agendamento-id" />
+    <input type="text" id="equip-id-agend" placeholder="ID do Equipamento" required />
+    <input type="date" id="data-agend" required />
+    <input type="time" id="horario-agend" required />
+    <input type="text" id="tipo-servico" placeholder="Tipo de Serviço" />
+    <input type="text" id="obs-agend" placeholder="Observações" />
+    <button type="submit">Salvar Agendamento</button>
+    <button type="button" id="cancelar-agendamento">Cancelar</button>
+  </form>
+  <ul id="agendamentos"></ul>
+
+  <!-- Revisões -->
+  <h2>Revisões</h2>
+  <form id="form-revisao">
+    <input type="hidden" id="revisao-id" />
+    <input type="text" id="equip-id-rev" placeholder="ID do Equipamento" required />
+    <input type="text" id="descricao" placeholder="Descrição" required />
+    <input type="text" id="tecnico" placeholder="Técnico Responsável" required />
+    <input type="text" id="status-rev" placeholder="Status" />
+    <button type="submit">Salvar Revisão</button>
+    <button type="button" id="cancelar-revisao">Cancelar</button>
+  </form>
+  <ul id="revisoes"></ul>
 
   <script src="app.js"></script>
 </body>
 </html>
+
 
 *style.css:
 body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
@@ -21,91 +76,39 @@ li { background: #fff; margin: 5px 0; padding: 10px; border-radius: 5px; box-sha
 
 
 *app.js:
-async function carregarEquipamentos() {
-  const res = await fetch('http://localhost:3000/equipamentos');
-  const dados = await res.json();
-  const ul = document.getElementById('equipamentos');
-  ul.innerHTML = '';
-  dados.forEach(e => {
-    const li = document.createElement('li');
-    li.textContent = `${e.cliente_nome} - ${e.tipo} - ${e.status_equipamento}`;
-    ul.appendChild(li);
-  });
-}
-
-carregarEquipamentos();
-
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Reparo de Computadores</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1>Reparo de Computadores</h1>
-
-  <h2>Clientes</h2>
-  <form id="form-cliente">
-    <input type="hidden" id="cliente-id" />
-    <input type="text" id="nome" placeholder="Nome" required />
-    <input type="email" id="email" placeholder="Email" />
-    <input type="text" id="telefone" placeholder="Telefone" />
-    <input type="text" id="endereco" placeholder="Endereço" />
-    <button type="submit">Salvar Cliente</button>
-    <button type="button" id="cancelar">Cancelar</button>
-  </form>
-  <ul id="clientes"></ul>
-
-  <h2>Equipamentos</h2>
-  <ul id="equipamentos"></ul>
-
-  <h2>Agendamentos</h2>
-  <ul id="agendamentos"></ul>
-
-  <h2>Revisões</h2>
-  <ul id="revisoes"></ul>
-
-  <script src="app.js"></script>
-</body>
-</html>
-
-// URL base da API
 const API = 'http://localhost:3000';
 
-// -------- CLIENTES --------
+// --------------------- CLIENTES ---------------------
 async function carregarClientes() {
   const res = await fetch(`${API}/clientes`);
   const dados = await res.json();
   const ul = document.getElementById('clientes');
   ul.innerHTML = '';
-  dados.forEach(cliente => {
+  dados.forEach(c => {
     const li = document.createElement('li');
-    li.textContent = `${cliente.nome} - ${cliente.email} - ${cliente.telefone}`;
-    
+    li.textContent = `${c.nome} - ${c.email} - ${c.telefone}`;
     const editar = document.createElement('button');
     editar.textContent = 'Editar';
-    editar.onclick = () => preencherFormulario(cliente);
-    
+    editar.onclick = () => preencherCliente(c);
     const deletar = document.createElement('button');
     deletar.textContent = 'Deletar';
-    deletar.onclick = () => deletarCliente(cliente.id_cliente);
-    
+    deletar.onclick = () => deletarCliente(c.id_cliente);
     li.appendChild(editar);
     li.appendChild(deletar);
     ul.appendChild(li);
   });
 }
 
-function preencherFormulario(cliente) {
-  document.getElementById('cliente-id').value = cliente.id_cliente;
-  document.getElementById('nome').value = cliente.nome;
-  document.getElementById('email').value = cliente.email;
-  document.getElementById('telefone').value = cliente.telefone;
-  document.getElementById('endereco').value = cliente.endereco;
+function preencherCliente(c) {
+  document.getElementById('cliente-id').value = c.id_cliente;
+  document.getElementById('nome').value = c.nome;
+  document.getElementById('email').value = c.email;
+  document.getElementById('telefone').value = c.telefone;
+  document.getElementById('endereco').value = c.endereco;
 }
 
-async function salvarCliente(event) {
-  event.preventDefault();
+async function salvarCliente(e) {
+  e.preventDefault();
   const id = document.getElementById('cliente-id').value;
   const cliente = {
     nome: document.getElementById('nome').value,
@@ -113,61 +116,211 @@ async function salvarCliente(event) {
     telefone: document.getElementById('telefone').value,
     endereco: document.getElementById('endereco').value
   };
-  
   if (id) {
-    // Atualizar
-    await fetch(`${API}/clientes/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(cliente)
-    });
+    await fetch(`${API}/clientes/${id}`, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(cliente)});
   } else {
-    // Criar
-    await fetch(`${API}/clientes`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(cliente)
-    });
+    await fetch(`${API}/clientes`, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(cliente)});
   }
-  
-  limparFormulario();
+  limparFormulario('cliente');
   carregarClientes();
 }
 
 async function deletarCliente(id) {
-  if(confirm('Deseja realmente deletar este cliente?')) {
-    await fetch(`${API}/clientes/${id}`, { method: 'DELETE' });
+  if(confirm('Deseja deletar este cliente?')) {
+    await fetch(`${API}/clientes/${id}`, {method:'DELETE'});
     carregarClientes();
   }
 }
 
-function limparFormulario() {
-  document.getElementById('cliente-id').value = '';
-  document.getElementById('form-cliente').reset();
+function limparFormulario(tipo) {
+  document.getElementById(`${tipo}-id`).value = '';
+  document.getElementById(`form-${tipo}`).reset();
 }
 
 document.getElementById('form-cliente').addEventListener('submit', salvarCliente);
-document.getElementById('cancelar').addEventListener('click', limparFormulario);
+document.getElementById('cancelar-cliente').addEventListener('click', () => limparFormulario('cliente'));
 
-// -------- EQUIPAMENTOS, AGENDAMENTOS, REVISÕES --------
-// Função já existente de carregar dados
-async function carregarDados() {
-  const endpoints = ['equipamentos','agendamentos','revisoes'];
-  endpoints.forEach(async (endpoint) => {
-    const res = await fetch(`${API}/${endpoint}`);
-    const dados = await res.json();
-    const ul = document.getElementById(endpoint);
-    ul.innerHTML = '';
-    dados.forEach(d => {
-      const li = document.createElement('li');
-      li.textContent = JSON.stringify(d);
-      ul.appendChild(li);
-    });
+// --------------------- EQUIPAMENTOS ---------------------
+async function carregarEquipamentos() {
+  const res = await fetch(`${API}/equipamentos`);
+  const dados = await res.json();
+  const ul = document.getElementById('equipamentos');
+  ul.innerHTML = '';
+  dados.forEach(e => {
+    const li = document.createElement('li');
+    li.textContent = `${e.tipo} - ${e.marca} - Cliente ID: ${e.cliente_nome}`;
+    const editar = document.createElement('button');
+    editar.textContent = 'Editar';
+    editar.onclick = () => preencherEquipamento(e);
+    const deletar = document.createElement('button');
+    deletar.textContent = 'Deletar';
+    deletar.onclick = () => deletarEquipamento(e.id_equipamento);
+    li.appendChild(editar);
+    li.appendChild(deletar);
+    ul.appendChild(li);
   });
 }
 
-// Carregar dados ao abrir a página
+function preencherEquipamento(e) {
+  document.getElementById('equipamento-id').value = e.id_equipamento;
+  document.getElementById('cliente-id-equip').value = e.cliente_nome || e.id_cliente;
+  document.getElementById('tipo').value = e.tipo;
+  document.getElementById('marca').value = e.marca;
+  document.getElementById('modelo').value = e.modelo;
+  document.getElementById('numero-serie').value = e.numero_serie;
+  document.getElementById('problema').value = e.problema_relatado;
+}
+
+async function salvarEquipamento(e) {
+  e.preventDefault();
+  const id = document.getElementById('equipamento-id').value;
+  const equipamento = {
+    cliente_nome: document.getElementById('cliente-id-equip').value,
+    tipo: document.getElementById('tipo').value,
+    marca: document.getElementById('marca').value,
+    modelo: document.getElementById('modelo').value,
+    numero_serie: document.getElementById('numero-serie').value,
+    problema_relatado: document.getElementById('problema').value
+  };
+  if(id){
+    await fetch(`${API}/equipamentos/${id}`, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(equipamento)});
+  } else {
+    await fetch(`${API}/equipamentos`, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(equipamento)});
+  }
+  limparFormulario('equipamento');
+  carregarEquipamentos();
+}
+
+async function deletarEquipamento(id){
+  if(confirm('Deseja deletar este equipamento?')){
+    await fetch(`${API}/equipamentos/${id}`, {method:'DELETE'});
+    carregarEquipamentos();
+  }
+}
+
+document.getElementById('form-equipamento').addEventListener('submit', salvarEquipamento);
+document.getElementById('cancelar-equipamento').addEventListener('click', () => limparFormulario('equipamento'));
+
+// --------------------- AGENDAMENTOS ---------------------
+async function carregarAgendamentos(){
+  const res = await fetch(`${API}/agendamentos`);
+  const dados = await res.json();
+  const ul = document.getElementById('agendamentos');
+  ul.innerHTML='';
+  dados.forEach(a=>{
+    const li = document.createElement('li');
+    li.textContent = `Equipamento ID: ${a.id_equipamento} - ${a.data_agendada} ${a.horario} - ${a.tipo_servico}`;
+    const editar = document.createElement('button');
+    editar.textContent='Editar';
+    editar.onclick = ()=> preencherAgendamento(a);
+    const deletar = document.createElement('button');
+    deletar.textContent='Deletar';
+    deletar.onclick = ()=> deletarAgendamento(a.id_agendamento);
+    li.appendChild(editar);
+    li.appendChild(deletar);
+    ul.appendChild(li);
+  });
+}
+
+function preencherAgendamento(a){
+  document.getElementById('agendamento-id').value = a.id_agendamento;
+  document.getElementById('equip-id-agend').value = a.id_equipamento;
+  document.getElementById('data-agend').value = a.data_agendada;
+  document.getElementById('horario-agend').value = a.horario;
+  document.getElementById('tipo-servico').value = a.tipo_servico;
+  document.getElementById('obs-agend').value = a.observacoes;
+}
+
+async function salvarAgendamento(e){
+  e.preventDefault();
+  const id = document.getElementById('agendamento-id').value;
+  const agendamento = {
+    id_equipamento: document.getElementById('equip-id-agend').value,
+    data_agendada: document.getElementById('data-agend').value,
+    horario: document.getElementById('horario-agend').value,
+    tipo_servico: document.getElementById('tipo-servico').value,
+    observacoes: document.getElementById('obs-agend').value
+  };
+  if(id){
+    await fetch(`${API}/agendamentos/${id}`, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(agendamento)});
+  }else{
+    await fetch(`${API}/agendamentos`, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(agendamento)});
+  }
+  limparFormulario('agendamento');
+  carregarAgendamentos();
+}
+
+async function deletarAgendamento(id){
+  if(confirm('Deseja deletar este agendamento?')){
+    await fetch(`${API}/agendamentos/${id}`, {method:'DELETE'});
+    carregarAgendamentos();
+  }
+}
+
+document.getElementById('form-agendamento').addEventListener('submit', salvarAgendamento);
+document.getElementById('cancelar-agendamento').addEventListener('click', ()=> limparFormulario('agendamento'));
+
+// --------------------- REVISÕES ---------------------
+async function carregarRevisoes(){
+  const res = await fetch(`${API}/revisoes`);
+  const dados = await res.json();
+  const ul = document.getElementById('revisoes');
+  ul.innerHTML='';
+  dados.forEach(r=>{
+    const li = document.createElement('li');
+    li.textContent = `Equipamento ID: ${r.id_equipamento} - ${r.descricao} - Técnico: ${r.tecnico_responsavel} - ${r.status_revisao}`;
+    const editar = document.createElement('button');
+    editar.textContent='Editar';
+    editar.onclick = ()=> preencherRevisao(r);
+    const deletar = document.createElement('button');
+    deletar.textContent='Deletar';
+    deletar.onclick = ()=> deletarRevisao(r.id_revisao);
+    li.appendChild(editar);
+    li.appendChild(deletar);
+    ul.appendChild(li);
+  });
+}
+
+function preencherRevisao(r){
+  document.getElementById('revisao-id').value = r.id_revisao;
+  document.getElementById('equip-id-rev').value = r.id_equipamento;
+  document.getElementById('descricao').value = r.descricao;
+  document.getElementById('tecnico').value = r.tecnico_responsavel;
+  document.getElementById('status-rev').value = r.status_revisao;
+}
+
+async function salvarRevisao(e){
+  e.preventDefault();
+  const id = document.getElementById('revisao-id').value;
+  const revisao = {
+    id_equipamento: document.getElementById('equip-id-rev').value,
+    descricao: document.getElementById('descricao').value,
+    tecnico_responsavel: document.getElementById('tecnico').value,
+    status_revisao: document.getElementById('status-rev').value
+  };
+  if(id){
+    await fetch(`${API}/revisoes/${id}`, {method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(revisao)});
+  }else{
+    await fetch(`${API}/revisoes`, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(revisao)});
+  }
+  limparFormulario('revisao');
+  carregarRevisoes();
+}
+
+async function deletarRevisao(id){
+  if(confirm('Deseja deletar esta revisão?')){
+    await fetch(`${API}/revisoes/${id}`, {method:'DELETE'});
+    carregarRevisoes();
+  }
+}
+
+document.getElementById('form-revisao').addEventListener('submit', salvarRevisao);
+document.getElementById('cancelar-revisao').addEventListener('click', ()=> limparFormulario('revisao'));
+
+// --------------------- INICIALIZAR ---------------------
 carregarClientes();
-carregarDados();
+carregarEquipamentos();
+carregarAgendamentos();
+carregarRevisoes();
 
 
