@@ -2,12 +2,13 @@ reparo-computadores/
 ├── backend/
 │   ├── package.json
 │   ├── server.js
-│   ├── routes/
-│   │   ├── equipamentos.js
-│   │   ├── agendamentos.js
-│   │   └── revisoes.js
-│   └── db/
-│       └── database.js
+│   ├── db/
+│   │   └── database.js
+│   └── routes/
+│       ├── clientes.js
+│       ├── equipamentos.js
+│       ├── agendamentos.js
+│       └── revisoes.js
 ├── frontend/
 │   ├── index.html
 │   ├── style.css
