@@ -2,6 +2,7 @@ cd backend
 npm init -y
 npm install express pg cors body-parser
 
+*database.js:
 const { Pool } = require('pg');
 
 const pool = new Pool({
@@ -14,6 +15,8 @@ const pool = new Pool({
 
 module.exports = pool;
 
+
+*server.js:
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -33,17 +36,18 @@ app.use('/revisoes', revisoesRoutes);
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
 
+*routes/equipamentos.js:
 const express = require('express');
 const router = express.Router();
 const pool = require('../db/database');
 
-// listar todos equipamentos
+
 router.get('/', async (req, res) => {
   const result = await pool.query('SELECT * FROM equipamentos ORDER BY id_equipamento');
   res.json(result.rows);
 });
 
-// adicionar equipamento
+
 router.post('/', async (req, res) => {
   const { cliente_nome, tipo, marca, modelo, numero_serie, problema_relatado } = req.body;
   const result = await pool.query(
@@ -55,3 +59,5 @@ router.post('/', async (req, res) => {
 });
 
 module.exports = router;
+
+
