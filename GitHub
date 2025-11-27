@@ -1,0 +1,6 @@
+git init
+git add .
+git commit -m "Projeto Reparo de Computadores - backend e frontend"
+git branch -M main
+git remote add origin https://github.com/SEU_USUARIO/reparo-computadores.git
+git push -u origin main
